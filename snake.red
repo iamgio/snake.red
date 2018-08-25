@@ -7,14 +7,23 @@ Red [
     Needs: 'View
 ]
 
+#define SIZE: 600x450
+#define FRAMERATE: 10
+
 view [
     title "Snake"
-    size 600x450
+    size SIZE
+    
+    at 0x0 root: box black SIZE rate FRAMERATE draw [
+        ; to-do: content
+    ] on-time [
+        ; to-do: triggered {FRAMERATE} times every second
+    ]
 
     do [
         actors: context [
-            on-key-down: function [face event] [
-                ;to-do
+            on-key-down: func [face event] [
+                 ; to-do: triggered on key press
             ]
         ]
     ]
