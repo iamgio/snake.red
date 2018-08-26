@@ -12,6 +12,7 @@ Red [
 
 #define SIZE: 600x450
 #define FRAMERATE: 10
+#define PART-SIZE: 20x20
 
 random/seed now/time
 
@@ -20,17 +21,28 @@ start-game
 view [
     title "Snake"
     size SIZE
+    backdrop black
+
+    at get-part-location 1 
+        snake-head: box white PART-SIZE
     
-    at 0x0 root: box black SIZE rate FRAMERATE draw [
-        ; to-do: content
-    ] on-time [
-        ; to-do: triggered {FRAMERATE} times every second
+    at -100x-100 box black 0x0 rate FRAMERATE on-time [
+        move
+        snake-head/offset: get-part-location 1
+        ; game loop: triggered {FRAMERATE} times every second
     ]
 
     do [
         actors: context [
             on-key-down: func [face event] [
-                 ; to-do: triggered on key press
+                case [
+                    event/key = to word! "up"    [set-head-direction up]
+                    event/key = to word! "right" [set-head-direction right]
+                    event/key = to word! "down"  [set-head-direction down]
+                    event/key = to word! "left"  [set-head-direction left]
+
+                ]
+                ; triggered on key press
             ]
         ]
     ]

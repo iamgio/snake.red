@@ -5,13 +5,11 @@ Red [
 game: none
 snake: none
 candy: none
+parts-amount: none
 
 start-game: func[] [
-    snake: [
-        [
-            x: 20 y: 20 direction: right
-        ]
-    ]
+    snake: make map! ["1x" 20 "1y" 20 "1d" 1]
+    parts-amount: 1
     candy: object [
         x: random SIZE/x
         y: random SIZE/y
@@ -20,12 +18,39 @@ start-game: func[] [
 
 end-game: func[] [
     game: none
+    snake: none
+    candy: none
+    parts-amount: none
 ]
 
-update: func[] [
-
+set-head-direction: func[direction] [
+    put snake "1d" direction
 ]
 
-get-part-x: func[i] [pick pick snake i 2]
-get-part-y: func[i] [pick pick snake i 4]
-get-part-direction: func[i] [pick pick snake i 6]
+move: func[] [
+    head-direction: select snake "1d"
+    case [
+        head-direction = up    [put snake "1y" (subtract select snake "1y" PART-SIZE/y)]
+        head-direction = right [put snake "1x" (add      select snake "1x" PART-SIZE/x)]
+        head-direction = down  [put snake "1y" (add      select snake "1y" PART-SIZE/y)]
+        head-direction = left  [put snake "1x" (subtract select snake "1x" PART-SIZE/x)]
+    ]
+    i: 2
+    loop parts-amount - 1 [
+        wait divide 1 FRAMERATE
+        i-string: to string! i
+        put snake append i-string "x" select snake "1x"
+        put snake append i-string "y" select snake "1y"
+        put snake append i-string "d" select snake "1d"
+        i: i + 1
+    ] 
+]
+
+get-part-x: func[i] [select snake (append to string! i "x")]
+get-part-y: func[i] [select snake (append to string! i "y")]
+get-part-direction: func[i] [select snake (append to string! i "d")]
+get-part-location: func[i] [
+     x: get-part-x i
+     y: get-part-y i
+     make pair! (mold x "x" y)
+]
