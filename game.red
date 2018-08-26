@@ -6,22 +6,26 @@ game: none
 snake: none
 candy: none
 parts-amount: none
+visual-parts: none
 
 start-game: func[] [
     snake: make map! ["1x" 20 "1y" 20 "1d" 1]
     parts-amount: 1
+    visual-parts: []
     candy: object [
-        x: multiply random (divide SIZE/x 20) 20
-        y: multiply random (divide SIZE/y 20) 20
-        location: make pair! (append append to string! x "x" to string! y)
+        location: random-location
+        x: location/x
+        y: location/y
+
+        on-change*: func[name old new] [
+            x: location/x
+            y: location/y
+        ]
     ]
 ]
 
 end-game: func[] [
-    game: none
-    snake: none
-    candy: none
-    parts-amount: none
+    game: snake: candy: parts-amount: visual-parts: none
 ]
 
 set-head-direction: func[direction] [
@@ -47,6 +51,13 @@ move: func[] [
         put snake append i-string "d" select snake "1d"
         i: i + 1
     ] 
+]
+
+add-part: func[] [
+    parts-amount: parts-amount + 1
+    put snake append make string! parts-amount "x" select snake "1x"
+    put snake append make string! parts-amount "y" select snake "1y"
+    put snake append make string! parts-amount "d" select snake "1d"
 ]
 
 get-part-x: func[i] [select snake (append to string! i "x")]

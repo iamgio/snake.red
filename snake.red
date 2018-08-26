@@ -9,6 +9,7 @@ Red [
 
 #include %./direction.red
 #include %./game.red
+#include %./util.red
 
 #define SIZE: 600x500
 #define FRAMERATE: 10
@@ -25,13 +26,22 @@ view [
 
     at get-part-location 1 
         snake-head: box white PART-SIZE
+
+    do [append visual-parts snake-head]
     
     at candy/location
-        candy: box yellow PART-SIZE
+        candy-box: box yellow PART-SIZE
     
     at -100x-100 box black 0x0 rate FRAMERATE on-time [
         move
         snake-head/offset: get-part-location 1
+
+        if collide snake-head candy-box [
+            candy/location: random-location
+            candy-box/offset: candy/location
+            add-part
+            append reduce visual-parts ['box white 100x100]
+        ]
         ; game loop: triggered {FRAMERATE} times every second
     ]
 
