@@ -52,5 +52,5 @@ get-part-direction: func[i] [select snake (append to string! i "d")]
 get-part-location: func[i] [
      x: get-part-x i
      y: get-part-y i
-     make pair! (mold x "x" y)
+     make pair! (append append to string! x "x" to string! y)
 ]
