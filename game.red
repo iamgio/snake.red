@@ -11,8 +11,9 @@ start-game: func[] [
     snake: make map! ["1x" 20 "1y" 20 "1d" 1]
     parts-amount: 1
     candy: object [
-        x: random SIZE/x
-        y: random SIZE/y
+        x: multiply random (divide SIZE/x 20) 20
+        y: multiply random (divide SIZE/y 20) 20
+        location: make pair! (append append to string! x "x" to string! y)
     ]
 ]
 
@@ -24,7 +25,9 @@ end-game: func[] [
 ]
 
 set-head-direction: func[direction] [
-    put snake "1d" direction
+    if not is-opposite get-part-direction 1 direction [
+        put snake "1d" direction
+    ]
 ]
 
 move: func[] [
